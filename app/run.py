@@ -9,6 +9,8 @@ import joblib
 import pickle
 from sqlalchemy import create_engine
 
+# custom unpickler needed for proper unpickling when deploying using
+# gunicorn
 class CustomUnpickler(pickle.Unpickler):
 
     def find_class(self, module, name):
@@ -88,7 +90,7 @@ def init_app():
         return app
 
 def run_app(host=None, port=None, debug=None):
-    # initialize an d run Flask app
+    # initialize and run Flask app
     app = init_app()
     app.run(host=host, port=port, debug=debug)
 
