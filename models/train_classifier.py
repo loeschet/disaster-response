@@ -154,6 +154,7 @@ def save_model(model, model_filepath):
 
 
 def main():
+    nltk.download('omw-1.4')
     nltk.download('punkt')
     nltk.download('stopwords')
     nltk.download('wordnet')

@@ -6,8 +6,16 @@ from train_classifier import ColumnSelector, tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 import joblib
+import pickle
 from sqlalchemy import create_engine
 
+class CustomUnpickler(pickle.Unpickler):
+
+    def find_class(self, module, name):
+        try:
+            return super().find_class(__name__, name)
+        except AttributeError:
+            return super().find_class(module, name)
 
 # load data from SQLite database
 file_path = join(dirname(__file__), "../data/DisasterResponse.db")
@@ -17,7 +25,8 @@ df['tokens'] = df['message'].map(lambda x: tokenize(x))
 
 # load scikit-learn model from pickle file
 file_path = join(dirname(__file__), "../models/classifier.pkl")
-model = joblib.load(file_path)
+#model = joblib.load(file_path)
+model = CustomUnpickler(open(file_path, 'rb')).load()
 
 def init_routes(app):
     '''
@@ -78,11 +87,11 @@ def init_app():
 
         return app
 
-def run_app(port=3001, debug=True):
+def run_app(host=None, port=None, debug=None):
     # initialize an d run Flask app
     app = init_app()
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    app.run(host=host, port=port, debug=debug)
 
 
 if __name__ == '__main__':
-    run_app()
+    run_app(host='0.0.0.0', port=3001, debug=True)
