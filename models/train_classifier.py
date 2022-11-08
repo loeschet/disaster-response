@@ -181,7 +181,7 @@ def main():
 
         # simple hyperparameter tuning
         print('Find best parameters using simple grid search')
-        print('NOTE! This can take ~45 min. on a modern-day CPU!')
+        print('NOTE! This can take ~1 1/2 hrs. on a modern-day CPU!')
         parameters = {"clf__estimator__max_depth": [3, 20, None],
                       "clf__estimator__max_features": ['sqrt', 'log2'],
                       "clf__estimator__n_estimators": [10, 20, 30]}

@@ -45,7 +45,7 @@ python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
 
 This will load the data from the database created in step 1. and train a `scikit-learn` model which is then saved as a pickle file under the `models` directory.
 
-**Important Note:** During the training, grid search with cross-validation is performed to find the optimal parameters of the model. This was tested on a modern CPU and found to take approximately 45 minutes. In case you don't want to run the full grid search and just do a quick test of this project, please open up `models/train_classifier.py` and comment out lines 175-196, which will cause the program to simply use the default settings of the model in `scikit-learn`.
+**Important Note:** During the training, grid search with cross-validation is performed to find the optimal parameters of the model. This was tested on a modern CPU and found to take approximately 90 minutes. In case you don't want to run the full grid search and just do a quick test of this project, please open up `models/train_classifier.py` and comment out lines 175-196, which will cause the program to simply use the default settings of the model in `scikit-learn`.
 
 ### 3. Run web app
 
