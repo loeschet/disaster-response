@@ -55,10 +55,6 @@ def load_data(database_filepath):
     X = df[["message", "genre"]]
     Y = df.loc[:, (df.dtypes == int) & (df.columns != "id")]
 
-    # remove the (few) events that have a 2 as label for "related" column
-    X = X[Y["related"] != 2]
-    Y = Y[Y["related"] != 2]
-    
     return X, Y, Y.columns
 
 

@@ -45,6 +45,10 @@ def clean_data(df):
         categories[column] = categories[column].apply(lambda x: x[-1])
         categories[column] = categories[column].astype(int)
 
+    # remove examples where "related" category has label 2 in both Dataframes
+    df = df.loc[(categories["related"] != 2)]
+    categories = categories.loc[(categories["related"] != 2)]
+
     # drop original categires columns and concatenate with categories DataFrame
     df.drop(columns="categories", inplace=True)
     df = pd.concat([df, categories], axis=1)
