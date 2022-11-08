@@ -9,10 +9,11 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import Pipeline
+from sklearn.pipeline import Pipeline, FeatureUnion
 from os.path import abspath
 import sys
 import pickle
@@ -116,7 +117,13 @@ def build_model():
 
     pipeline = Pipeline([
     ('selector',  ColumnSelector(columns="message")),
-    ('tfidf', TfidfVectorizer(tokenizer=tokenize)),
+    ('features', FeatureUnion([
+        ('tfidf', TfidfVectorizer(tokenizer=tokenize)),
+        ('topics_pipeline', Pipeline([
+            ('counts', CountVectorizer(tokenizer=tokenize)),
+            ('lda', LatentDirichletAllocation(n_components=10))
+        ]))
+    ])),
     ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
 
@@ -178,7 +185,6 @@ def main():
         parameters = {"clf__estimator__max_depth": [3, 20, None],
                       "clf__estimator__max_features": ['sqrt', 'log2'],
                       "clf__estimator__n_estimators": [10, 20, 30]}
-
 
         cv = GridSearchCV(model, parameters, scoring="f1_macro", refit=False,
                           verbose=3)
